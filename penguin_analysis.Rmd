@@ -1,0 +1,44 @@
+---
+title: "Penguin Analysis"
+author: "Marcus Williamson"
+output:
+  html_document: 
+    toc: true
+    number_sections: true
+---
+
+### Install packages
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+library(janitor)
+library(here)
+```
+
+### Write data to csv file
+
+```{r}
+write.csv(penguins_raw,here("data","penguins_raw.csv"))
+# Puts in folder "data" and names file "penguins_raw.csv"
+```
+
+### Make a function to clean up data
+
+```{r}
+cleaning_penguin_columns <- function(raw_data){
+  raw_data %>%    # piping function allows commands to be chained
+    clean_names() %>%   # cleans up from janitor package
+    select(-comments) %>%   # select function used to remove columns
+    select(-starts_with("Delta"))
+}
+```
+
+### Use cleaning function and view results
+
+```{r}
+penguins_clean <- cleaning_penguin_columns(penguins_raw)
+
+colnames(penguins_clean)
+```
+

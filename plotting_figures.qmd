@@ -1,0 +1,78 @@
+---
+title: "Making Figures"
+format: html
+editor: visual
+---
+
+## Reproducible Science and Making Figures
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(ggplot2)
+library(here)
+
+penguins_clean <-read.csv(here("data", "penguins_clean.csv"))
+
+source(here("functions", "cleaning.R"))
+# source functions from file
+```
+
+```{r}
+penguins_flippers <- penguins_clean %>%
+  select(species, flipper_length_mm) %>%
+  drop_na() %>%
+  shorten_species()
+
+colnames(penguins_flippers)
+```
+
+```{r}
+species_colours <- c("Adelie" = "darkorange",
+                     "Chinstrap" = "purple",
+                     "Gentoo" = "cyan4")
+
+# Define colour mapping
+```
+
+```{r}
+
+flipper_boxplot <- ggplot(
+  data = penguins_flippers,
+  aes(x = species,
+      y = flipper_length_mm)) +
+  geom_boxplot(aes(color = species),
+               width = 0.3,
+               show.legend = FALSE) +
+  geom_jitter(aes(color = species),
+              alpha = 0.3,
+              show.legend = FALSE,
+              position = position_jitter(
+                width = 0.2,
+                seed = 0)) +
+  scale_color_manual(values = species_colours) +
+  labs(x = "Species",
+       y = "Flipper Length (mm)") +
+  theme_bw()
+
+flipper_boxplot
+
+
+```
+
+```{r}
+agg_png("figures/penguin_boxplot_lowres.png",
+        width = , height, = units = "cm", res = , scaling = )
+```
+
+### Use vectors rather than pngY
+
+### Git/github
+
+good for collaboration
+
+Good for tracking changes
+
+Good for viewing previous working versions
+
+Good for transparency
